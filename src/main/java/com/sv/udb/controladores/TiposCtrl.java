@@ -52,5 +52,49 @@ public class TiposCtrl {
         }
         return resp;
     }
+     
+     
+    
+    public Tipos cons(Integer codiTipo)
+    {
+        Tipos resp = null;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
+        EntityManager em = emf.createEntityManager();
+        try
+        {
+            resp = em.find(Tipos.class, codiTipo);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            em.close();
+            emf.close();            
+        }
+        return resp;
+    }
+    
+    public List<Tipos> cons()
+    {
+        List<Tipos> resp = null;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
+        EntityManager em = emf.createEntityManager();
+        try
+        {
+            resp = em.createNamedQuery("Tipos.findAll", Tipos.class).getResultList();
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            em.close();
+            emf.close();            
+        }
+        return resp;
+    }
     
 }
