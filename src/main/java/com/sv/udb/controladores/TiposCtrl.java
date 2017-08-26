@@ -97,4 +97,65 @@ public class TiposCtrl {
         return resp;
     }
     
+    public boolean edit(Tipos obje)
+    {
+        boolean resp = false;
+        EntityManagerFactory emf = 
+                Persistence.createEntityManagerFactory("POOPU");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        try
+        {
+            em.merge(obje);
+            //em.flush();
+            tx.commit();
+            resp = true;
+        }
+        catch(Exception ex)
+        {
+            if(tx.isActive())
+            {
+                tx.rollback();
+            }
+            ex.printStackTrace();
+        }
+        finally
+        {
+            em.close();
+            emf.close();            
+        }
+        return resp;
+    }
+    
+    public boolean dele(Tipos obje)
+    {
+        boolean resp = false;
+        EntityManagerFactory emf = 
+                Persistence.createEntityManagerFactory("POOPU");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        try
+        {
+            em.remove(em.merge(obje));
+            //em.flush();
+            tx.commit();
+            resp = true;
+        }
+        catch(Exception ex)
+        {
+            if(tx.isActive())
+            {
+                tx.rollback();
+            }
+            ex.printStackTrace();
+        }
+        finally
+        {
+            em.close();
+            emf.close();            
+        }
+        return resp;
+    }
 }

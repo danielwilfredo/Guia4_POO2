@@ -9,6 +9,7 @@ import com.sv.udb.controladores.TiposCtrl;
 import com.sv.udb.modelos.Tipos;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -48,17 +49,43 @@ public class TipoServ extends HttpServlet {
             else if(CRUD.equals("Consultar"))
             {
                 //Para un objeto
-                Long codi = Long.parseLong(request.getParameter("codi"));
-                //Tipos objeTipo = new TiposCtrl().cons(codi);
-                
+                String codi = request.getParameter("codiradi");
+                Tipos objeTipo = new TiposCtrl().cons(Integer.parseInt(codi));
                 //Para una lista [Tablas]
-                //List<Tipos> listTipo = new TiposCtrl().cons();
+                List<Tipos> listTipo = new TiposCtrl().cons();
+                request.setAttribute("codi", objeTipo.getCodiTipo());
+                 request.setAttribute("nomb", objeTipo.getNombTipo());
+                 request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
-        }
-        else
+            else if(CRUD.equals("Eliminar"))
+            {
+                String codi = request.getParameter("codiradi");
+                Tipos objeTipo = new TiposCtrl().cons(Integer.parseInt(codi));
+                mens = new TiposCtrl().dele(objeTipo) ? "Datos Eliminados exitosamente" : "Datos NO Eliminados";
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                
+            }
+         else if(CRUD.equals("Modificar"))
+            {
+                //Para un objeto
+                String codi = request.getParameter("codi");
+                Tipos objeTipo = new TiposCtrl().cons(Integer.parseInt(codi));
+              
+                //Para una lista [Tablas]
+                objeTipo.setNombTipo(request.getParameter("nomb"));
+                mens = new TiposCtrl().edit(objeTipo) ? "Datos modificados exitosamente" : "Datos NO guardados";
+                 request.getRequestDispatcher("/index.jsp").forward(request, response);
+                
+            }
+               else
         {
+               request.setAttribute("mensAler", mens); 
             response.sendRedirect(request.getContextPath() + "/index.jsp");
         }
+        }
+     
+         
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
